@@ -263,6 +263,16 @@
             }, 1000);
         }
 
+        function showSurprise() {
+    // This opens his email app automatically
+    window.location.href = "mailto:your-email@gmail.com?subject=I%20Said%20Yes!&body=I%20love%20you%20too!%20Can't%20wait%20for%20Feb%2027th!";
+
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+    document.getElementById('surprise-section').classList.remove('hidden');
+    window.scrollTo(0,0);
+    startTimer();
+}
+
         setInterval(() => {
             const h = document.createElement('div');
             h.classList.add('bg-heart'); h.innerHTML = '❤️';
@@ -276,3 +286,4 @@
 </body>
 
 </html>
+
