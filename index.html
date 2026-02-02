@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Favorite Person ❤️</title>
+    <style>
+        :root {
+            --primary-pink: #ff4081;
+            --soft-pink: #fce4ec;
+            --dark-pink: #d81b60;
+            --gold: #ffca28;
+        }
+
+        body {
+            margin: 0;
+            /* Updated to your specific teal-gold gradient */
+            background: linear-gradient(135deg, #2a9d8f 0%, #e9c46a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-pink);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Fixed Background Hearts */
+        .bg-heart {
+            position: fixed;
+            top: -50px;
+            font-size: 24px;
+            z-index: -1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Heart Scroll Indicator */
+        #heart-slider {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            display: none; 
+            z-index: 2000;
+        }
+
+        #heart-fill {
+            width: 100%;
+            height: 0%;
+            background: var(--primary-pink);
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .scroll-heart {
+            position: absolute;
+            left: -14px;
+            bottom: -5px;
+            font-size: 36px;
+            transition: bottom 0.1s linear;
+            filter: drop-shadow(0 0 5px white);
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 40px;
+            border-radius: 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            max-width: 450px;
+            width: 90%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .btn-wrapper { margin-top: 30px; height: 160px; position: relative; display: flex; justify-content: center; align-items: center; gap: 20px; }
+        button { padding: 14px 35px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        #yes-btn { background: var(--primary-pink); color: white; box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4); }
+        #no-btn { background: #fb8c00; color: white; transition: all 0.3s ease; }
+        #surprise-btn { background: linear-gradient(45deg, var(--gold), #ffb300); color: #5d4037; width: 100%; margin-top: 25px; animation: pulse 1.5s infinite; border: 2px solid white; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+
+        /* RESTORED PERFECT DIMENSIONS FOR THE BOOK */
+        #storybook-section { display: none; padding: 60px 15px; }
+        .story-step { 
+            margin: 150px auto; 
+            max-width: 500px; 
+            opacity: 0; 
+            transform: translateY(60px); 
+            transition: all 1.2s ease-out; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .story-step.visible { opacity: 1; transform: translateY(0); }
+        
+        .story-img { 
+            width: 100%; 
+            border-radius: 30px; 
+            border: 10px solid white; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12); 
+            /* Removed height constraints to prevent cropping */
+        }
+
+        .story-caption { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            margin-top: -35px; 
+            width: 85%; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            border-bottom: 5px solid var(--primary-pink); 
+        }
+
+        .hidden { display: none !important; }
+        .memories-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .memory-card { background: #fff; height: 110px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 35px; border: 2px dashed var(--soft-pink); cursor: pointer; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <div id="heart-slider">
+        <div id="heart-fill"></div>
+        <div class="scroll-heart" id="moving-heart">❤️</div>
+    </div>
+
+    <div id="page1" class="container">
+        <div class="glass-card">
+            <img src="cover.jpeg" alt="Us" style="width:100%; border-radius:20px; margin-bottom:15px;">
+            <h2>Will you be my Valentine? 💕</h2>
+            <p>Official invite for my favorite person</p>
+            <div class="btn-wrapper" id="wrapper">
+                <button id="yes-btn" onclick="goToMemories()">YES! ✨</button>
+                <button id="no-btn" onmouseover="moveButton()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page2" class="container hidden">
+        <div class="glass-card">
+            <h2>I knew you'd say yes! 🥰</h2>
+            <p>Meeting again on Feb 27: ✈️</p>
+            <div id="timer" style="font-size: 28px; font-weight: bold; color: var(--dark-pink);"></div>
+            
+            <div class="memories-grid">
+                <div class="memory-card" onclick="revealMedia(this, 'photone.jpeg', 'image')">🎁</div>
+                <div class="memory-card" onclick="revealMedia(this, 'phototwo.jpeg', 'image')">🎁</div>
+                <div class="memory-card" onclick="revealMedia(this, 'videone.mp4', 'video')">🎁</div>
+                <div class="memory-card" onclick="revealMedia(this, 'videotwo.mp4', 'video')">🎁</div>
+            </div>
+
+            <button id="surprise-btn" onclick="openStorybook()">OPEN OUR SURPRISE BOOK 📖</button>
+        </div>
+    </div>
+
+    <div id="storybook-section">
+        <h1 style="text-align:center; font-size: 36px; margin-bottom: 50px;">The Journey We Share... ❤️</h1>
+        
+        <div class="story-step"><img src="one.jpeg" class="story-img"><div class="story-caption"><h3>Back in class 7th ✨</h3><p>Remember that day I had no pencil? You quietly broke yours in two and handed me one half. That small gesture felt like the world.</p></div></div>
+        <div class="story-step"><img src="two.jpeg" class="story-img"><div class="story-caption"><h3>Shared Smiles 😊</h3><p>We used to place our bags in front of us, hiding our hands, just so we could hold them without anyone noticing.</p></div></div>
+        <div class="story-step"><img src="three.jpeg" class="story-img"><div class="story-caption"><h3>Our Bond ❤️</h3><p>That moment when your cheeky attempt missed and landed on my ear… and you ran off, leaving me smiling forever.</p></div></div>
+        <div class="story-step"><img src="four.jpeg" class="story-img"><div class="story-caption"><h3>Always Together 🤝</h3><p>After all those years, I saw you again. Just a quick look, and my eyes welled up… it felt like seeing something I’d been waiting for forever.</p></div></div>
+        <div class="story-step"><img src="five.jpeg" class="story-img"><div class="story-caption"><h3>Pure Happiness 🌟</h3><p>and then… we met. We met again, Yash. Sitting next to you after all these years, being able to touch you, to feel you… it was one of the greatest days of my life. Even writing this makes me so emotional. Damn, I love you so much.</p></div></div>
+        <div class="story-step"><img src="six.jpeg" class="story-img"><div class="story-caption"><h3>Thinking of You 💭</h3><p>Remember the first time you hugged me? I don’t know what you felt, but I felt something so pure, so divine. I’ll never forget it. I felt so protective of you, like you were my world.</p></div></div>
+        <div class="story-step"><img src="seven.jpeg" class="story-img"><div class="story-caption"><h3>A Precious Moment 📸</h3><p>Then we went to Manali… something I thought was impossible actually happened, and it happened with you. I was so, so happy.</p></div></div>
+        <div class="story-step"><img src="eight.jpeg" class="story-img"><div class="story-caption"><h3>GoodByes.. ❤️</h3><p>But we can’t always be happy, can we? The distance was calling—you were leaving for Canada. We were stepping into a long-distance relationship. It was a big decision, but we were strong… stronger than ever at that moment.</p></div></div>
+        <div class="story-step"><img src="nine.jpeg" class="story-img"><div class="story-caption"><h3>Still Close 💛</h3><p>In this phase, we were happy. Every time you saw something beautiful, you’d video call me. Even with the distance, we never felt apart. We moved freely in our own worlds.</p></div></div>
+        <div class="story-step"><img src="ten.jpeg" class="story-img"><div class="story-caption"><h3>Silent Distance 🌙</h3><p>Like every other relationship, we had our fights. But this one felt different. I wasn’t just hurt—I felt neglected. Even though distance had never made me feel far from you, I started feeling it when you began socializing more. It felt like you were slowly leaving me behind.</p></div></div>
+        <div class="story-step"><img src="eleven.jpeg" class="story-img"><div class="story-caption"><h3>Quiet Struggle 🌧️</h3><p>I needed closeness, you needed space. Neither of us was wrong.</p></div></div>
+        <div class="story-step"><img src="twelve.jpeg" class="story-img"><div class="story-caption"><h3>Staying Strong 💪</h3><p>That day, nothing else mattered. Knowing your mom wasn’t well filled us all with concern.</p></div></div>
+        <div class="story-step"><img src="thirteen.jpeg" class="story-img"><div class="story-caption"><h3>Family First 🌱</h3><p>Without a second thought, you booked your tickets and came home. That’s who you are—loving, responsible, and deeply devoted to your family. I was so proud of you.</p></div></div>
+        <div class="story-step"><img src="fourteen.jpeg" class="story-img"><div class="story-caption"><h3>Answered Prayers 🙏</h3><p>By God’s grace, your mom was healthy—stronger than ever. And I got to see you too… maybe it was destiny.</p></div></div>
+        <div class="story-step"><img src="fifteen.jpeg" class="story-img"><div class="story-caption"><h3>Our Common Dreams ☁️</h3><p>We aren't just waiting; we are building. Building a future where we never have to say goodbye at an airport again.</p></div></div>
+        <div class="story-step"><img src="sixteen.jpeg" class="story-img"><div class="story-caption"><h3>Lessons Learned 🌱</h3><p>History repeated itself. This time, I was the one enjoying life and giving you less priority—maybe out of hurt, maybe as revenge. It wasn’t right, and I’m still sorry.</p></div></div>
+        <div class="story-step"><img src="seventeen.jpeg" class="story-img"><div class="story-caption"><h3>Unmet Needs 🤍</h3><p>Life was heavy for me then, and still is in many ways. I hoped you’d have time for me, and I know you were exhausted with long shifts. You weren’t wrong—but what I needed wasn’t more time, just a little emotional support.</p></div></div>
+        <div class="story-step"><img src="nineteen.jpeg" class="story-img"><div class="story-caption"><h3>Inner Chaos 🌫️</h3><p>So many things came together—my future, my career, university pressure, and my emotions. I felt overwhelmed and scared of losing what mattered to me. I just wanted to heal and make things right.</p></div></div>
+        <div class="story-step"><img src="twenty.jpeg" class="story-img"><div class="story-caption"><h3>Safe Anchor 🤍</h3><p>I know, Yash, you’ve always been with me—you’d never think bad about me or hurt me. My real battle was with my own mind, and I’ll always be grateful you said, ‘Main tere saath hoon.’</p></div></div>
+        <div class="story-step"><img src="twentyone.jpeg" class="story-img"><div class="story-caption"><h3>Chosen Patience ⭐</h3><p>The real culprit was my mind. It daydreams, overthinks, and runs at a speed even I can’t stop. I know I need help, I’m working on it—and I’m truly sorry.</p></div></div>
+        <div class="story-step"><img src="twentytwo.jpeg" class="story-img"><div class="story-caption"><h3>You Are Home 🏡</h3><p>I know you don’t like it when I overthink or say things out of fear, but this is something I am still learning to handle. I am taking my medication properly now and trying every day to be better. In this difficult phase, all I have wanted is you by my side, consistently and truly. I don’t want anyone else stepping in or taking advantage of my vulnerability. I trust only you, and I want to keep trusting you. I have never thought of anyone else, because you are irreplaceable to me. You are my family, and family cannot be replaced. We fight sometimes, but who doesn’t? So… be my Valentine 🫂I can't wait to hold your hand again.</p></div></div>
+
+        <p style="text-align:center; padding: 100px 0; font-style: italic; font-size: 20px;">I love you forever! ❤️</p>
+    </div>
+
+    <script>
+        const nextMeetingDate = new Date("2026-02-27T00:00:00");
+        const heartColors = ['#ff4081', '#7e57c2', '#ffca28', '#ff80ab', '#ba68c8'];
+
+        function goToMemories() {
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+            startTimer();
+        }
+
+        function revealMedia(element, src, type) {
+            if (type === 'image') {
+                element.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:contain;border-radius:15px;">`;
+            } else if (type === 'video') {
+                element.innerHTML = `
+                    <video style="width:100%;height:100%;object-fit:contain;border-radius:15px;" autoplay muted loop playsinline>
+                        <source src="${src}" type="video/mp4">
+                    </video>`;
+            }
+        }
+
+        function openStorybook() {
+            document.getElementById('page2').classList.add('hidden');
+            document.getElementById('storybook-section').style.display = 'block';
+            document.getElementById('heart-slider').style.display = 'block';
+            document.body.style.overflow = 'auto'; 
+        }
+
+        window.addEventListener('scroll', () => {
+            const steps = document.querySelectorAll('.story-step');
+            const scrolled = window.scrollY;
+            const totalHeight = document.body.scrollHeight - window.innerHeight;
+            const progress = (scrolled / totalHeight) * 100;
+            document.getElementById('heart-fill').style.height = progress + '%';
+            document.getElementById('moving-heart').style.bottom = progress + '%';
+            steps.forEach(step => {
+                if(step.getBoundingClientRect().top < window.innerHeight * 0.85) {
+                    step.classList.add('visible');
+                }
+            });
+        });
+
+        function moveButton() {
+            const noBtn = document.getElementById('no-btn');
+            const wrapper = document.getElementById('wrapper');
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = Math.random() * (wrapper.clientWidth - noBtn.clientWidth) + 'px';
+            noBtn.style.top = Math.random() * (wrapper.clientHeight - noBtn.clientHeight) + 'px';
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                const diff = nextMeetingDate - new Date();
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const m = Math.floor((diff / 1000 / 60) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                document.getElementById('timer').innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+            }, 1000);
+        }
+
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.classList.add('bg-heart'); h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + "vw";
+            h.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            h.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 5000);
+        }, 300);
+    </script>
+</body>
+</html>
